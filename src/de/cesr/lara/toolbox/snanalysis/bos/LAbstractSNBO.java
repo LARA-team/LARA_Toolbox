@@ -6,12 +6,14 @@
  */
 package de.cesr.lara.toolbox.snanalysis.bos;
 
+
 import java.util.Map;
 
 import de.cesr.lara.components.LaraBehaviouralOption;
 import de.cesr.lara.components.LaraPreference;
 import de.cesr.lara.components.agents.LaraAgent;
 import de.cesr.lara.components.decision.LaraDecisionConfiguration;
+
 
 /**
  * 
@@ -21,17 +23,29 @@ import de.cesr.lara.components.decision.LaraDecisionConfiguration;
  * @date 20.01.2010
  * 
  */
-public abstract class LAbstractSNBO<A extends LaraAgent<A, BO>, BO extends LAbstractSNBO<A, BO>>
-		extends LaraBehaviouralOption<A, BO> {
+public abstract class LAbstractSNBO<A extends LaraAgent<A, BO>, BO extends LAbstractSNBO<A, BO>> extends
+		LaraBehaviouralOption<A, BO> {
 
 	/**
 	 * @param key
 	 * @param agent
 	 * @param utilities
 	 */
-	public LAbstractSNBO(String key, A agent,
-			Map<Class<? extends LaraPreference>, Double> utilities) {
+	public LAbstractSNBO(String key, A agent, Map<Class<? extends LaraPreference>, Double> utilities) {
 		super(key, agent, utilities);
+	}
+
+	/**
+	 * @param dBuilder
+	 */
+	@Override
+	public Map<Class<? extends LaraPreference>, Double> getSituationalUtilities(LaraDecisionConfiguration dConfiguration) {
+		Map<Class<? extends LaraPreference>, Double> utilities = getModifiableUtilities();
+		for (Class<? extends LaraPreference> goal : dConfiguration.getPreferences()) {
+			computeUtility(goal);
+		}
+		// TODO fill map!
+		return utilities;
 	}
 
 	/**
@@ -39,20 +53,5 @@ public abstract class LAbstractSNBO<A extends LaraAgent<A, BO>, BO extends LAbst
 	 * @return Created by Sascha Holzhauer on 25.01.2010
 	 */
 	public abstract boolean computeUtility(Class<? extends LaraPreference> goal);
-
-	/**
-	 * @param dBuilder
-	 */
-	@Override
-	public Map<Class<? extends LaraPreference>, Double> getSituationalUtilities(
-			LaraDecisionConfiguration<BO> dConfiguration) {
-		Map<Class<? extends LaraPreference>, Double> utilities = getModifiableUtilities();
-		for (Class<? extends LaraPreference> goal : dConfiguration
-				.getPreferences()) {
-			computeUtility(goal);
-		}
-		// TODO fill map!
-		return utilities;
-	}
 
 }
