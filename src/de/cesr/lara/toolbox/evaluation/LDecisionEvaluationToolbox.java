@@ -16,17 +16,15 @@ import de.cesr.lara.components.LaraBehaviouralOption;
 import de.cesr.lara.components.agents.LaraAgent;
 import de.cesr.lara.components.agents.impl.LDefaultAgentComp;
 import de.cesr.lara.components.decision.LaraDecisionConfiguration;
-import de.cesr.lara.components.decision.impl.LDecisionHeuristicComponent_MaxLineTotalRandomAtTie;
-import de.cesr.lara.components.decision.impl.LDeliberativeDeciderFactory;
 import de.cesr.lara.components.decision.impl.LDecisionConfiguration;
-import de.cesr.lara.components.preprocessor.LaraBOPreselector;
-import de.cesr.lara.components.preprocessor.LaraDecisionModeSelector;
-import de.cesr.lara.components.preprocessor.LaraPreprocessorFactory;
-import de.cesr.lara.components.preprocessor.LaraPreprocessorConfiguration;
-import de.cesr.lara.components.preprocessor.impl.LDefaultLBOUpdaterBuilder;
+import de.cesr.lara.components.decision.impl.LDecisionHeuristicComponent_MaxLineTotalRandomAtTie;
+import de.cesr.lara.components.preprocessor.LaraPreprocessor;
+import de.cesr.lara.components.preprocessor.LaraPreprocessorConfigurator;
+import de.cesr.lara.components.preprocessor.impl.LContributingBoCollector;
+import de.cesr.lara.components.preprocessor.impl.LDefaultBOUpdater;
+import de.cesr.lara.components.preprocessor.impl.LDeliberativeDecisionModeSelector;
+import de.cesr.lara.components.preprocessor.impl.LPreprocessor;
 import de.cesr.lara.components.preprocessor.impl.LPseudoPrefereceUpdater;
-import de.cesr.lara.components.preprocessor.impl.LContributingBOPreselector;
-import de.cesr.lara.components.preprocessor.impl.LPreprocessFactory;
 import de.cesr.lara.components.util.logging.impl.Log4jLogger;
 
 /**
@@ -34,7 +32,7 @@ import de.cesr.lara.components.util.logging.impl.Log4jLogger;
  */
 public class LDecisionEvaluationToolbox {
 
-	private static Map<LaraDecisionConfiguration, LPreprocessFactory>	preprocessBuilder	= new HashMap<LaraDecisionConfiguration, LPreprocessFactory>();
+	private static Map<LaraDecisionConfiguration, LPreprocessor>	preprocessBuilder	= new HashMap<LaraDecisionConfiguration, LPreprocessor>();
 
 	/**
 	 * Logger
@@ -44,7 +42,7 @@ public class LDecisionEvaluationToolbox {
 
 	/**
 	 * Creates a PreprocessBuilder to use for post processing, for instance to evaluate the selected BO in an updated
-	 * environment. No preferenceWeights are updated and all recent BOs are used from memory (LContributingBOPreselector).
+	 * environment. No preferenceWeights are updated and all recent BOs are used from memory (LContributingBoCollector).
 	 * 
 	 * TODO provide further methods that allow customisation of preprocessor components
 	 * 
@@ -54,21 +52,17 @@ public class LDecisionEvaluationToolbox {
 	 * @param dBuilder
 	 * @return configurator
 	 */
-	public static <A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<A, BO>> LaraPreprocessorFactory<A, BO> getPostProcessPreprocessBuilder(
-			LaraPreprocessorConfiguration<A, BO> configurator, LaraDecisionConfiguration dBuilder) {
+	public static <A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<A, BO>> LaraPreprocessor<A, BO> getPostProcessPreprocessBuilder(
+			LaraPreprocessorConfigurator<A, BO> configurator, LaraDecisionConfiguration dBuilder) {
 
-		LaraPreprocessorConfiguration<A, BO> newConfigurator = configurator.clone();
+		LaraPreprocessorConfigurator<A, BO> newConfigurator = configurator.clone();
 		// / force preprocessor to select deliberative decision making mode (assign LDeliberativeDeciderFactory):
-		configurator.setDecisionModeSelector(new LaraDecisionModeSelector<A, BO>() {
-			@Override
-			public void selectDecisionMode(A agent, LaraDecisionConfiguration dBuilder) {
-				agent.getLaraComp().getDecisionData(dBuilder).setDeciderFactory(
-						LDeliberativeDeciderFactory.<A, BO> getFactory((Class<A>) agent.getClass()));
-			}
-		}, dBuilder);
-		configurator.setBOCollector(new LContributingBOPreselector<A, BO>(), dBuilder);
-		configurator.setBOAdapter(new LDefaultLBOUpdaterBuilder<A, BO>(), dBuilder);
-		configurator.setPreferenceUpdater(new LPseudoPrefereceUpdater<A>(), dBuilder);
+		configurator
+				.setDecisionModeSelector(new LDeliberativeDecisionModeSelector<A, BO>());
+		configurator.setBOCollector(new LContributingBoCollector<A, BO>(), dBuilder);
+		configurator.setBOAdapter(new LDefaultBOUpdater<A, BO>(), dBuilder);
+		configurator.setPreferenceUpdater(new LPseudoPrefereceUpdater<A, BO>(),
+				dBuilder);
 
 		return configurator.getPreprocessorFactory();
 	}
@@ -77,7 +71,7 @@ public class LDecisionEvaluationToolbox {
 	 * TODO make generic
 	 */
 	public <A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<A, BO>> void evaluateSelectedBoAgainstOpimalBo(
-			LaraPreprocessorConfiguration<A, BO> configurator, LaraDecisionConfiguration dBuilder, A agent) {
+			LaraPreprocessorConfigurator<A, BO> configurator, LaraDecisionConfiguration dBuilder, A agent) {
 		// exchange dBuilder because of autonomous random stream for LaraDeliberativeChoiceComponent:
 
 		LaraDecisionConfiguration postProcessDBuilder = new LDecisionConfiguration("NeighbourhoodDecisionBuilder");
@@ -88,8 +82,8 @@ public class LDecisionEvaluationToolbox {
 
 		// perform a deliberative decision:
 		// / Update BOs with agents' current selected BO using a common pre-process builder:
-		getPostProcessPreprocessBuilder(configurator, postProcessDBuilder).getPreprocessor(postProcessDBuilder)
-				.preprocess(LaraBOPreselector.LAccuracy.ACCURATE, agent);
+		getPostProcessPreprocessBuilder(configurator, postProcessDBuilder)
+				.preprocess(postProcessDBuilder, agent);
 
 		// / Use existing decision data:
 		// / perform decision making:
