@@ -64,7 +64,7 @@ public class LDecisionEvaluationToolbox {
 		configurator.setPreferenceUpdater(new LPseudoPrefereceUpdater<A, BO>(),
 				dBuilder);
 
-		return configurator.getPreprocessorFactory();
+		return configurator.getPreprocessor();
 	}
 
 	/**
