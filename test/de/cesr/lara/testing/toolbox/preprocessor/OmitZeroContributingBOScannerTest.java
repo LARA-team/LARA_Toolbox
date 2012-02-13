@@ -38,7 +38,7 @@ import de.cesr.lara.components.container.memory.LaraBOMemory;
 import de.cesr.lara.components.container.memory.impl.LDefaultLimitedCapacityBOMemory;
 import de.cesr.lara.components.decision.LaraDecisionConfiguration;
 import de.cesr.lara.components.decision.impl.LDecisionConfiguration;
-import de.cesr.lara.components.decision.impl.LDecisionHeuristicComponent_MaxLineTotalRandomAtTie;
+import de.cesr.lara.components.decision.impl.LDeliberativeChoiceComp_MaxLineTotalRandomAtTie;
 import de.cesr.lara.components.eventbus.events.LaraEvent;
 import de.cesr.lara.components.eventbus.impl.LEventbus;
 import de.cesr.lara.components.model.impl.LAbstractModel;
@@ -50,16 +50,16 @@ import de.cesr.lara.components.preprocessor.impl.LOmitZeroContributingBOCollecto
 import de.cesr.lara.components.util.LaraRandom;
 import de.cesr.lara.components.util.impl.LCapacityManagers;
 import de.cesr.lara.components.util.impl.LRandomService;
-import de.cesr.lara.testing.TestUtils.TestAgent;
-import de.cesr.lara.testing.TestUtils.TestBo;
+import de.cesr.lara.testing.TestUtils.LTestAgent;
+import de.cesr.lara.testing.TestUtils.LTestBo;
 
 /**
  * TODO why placed in toolbox (SH)?
  */
 public class OmitZeroContributingBOScannerTest {
 
-	TestAgent															agent;
-	LaraBOMemory<TestBo> memory;
+	LTestAgent															agent;
+	LaraBOMemory<LTestBo> memory;
 
 	LaraPreference														goal1;
 	LaraPreference														goal2;
@@ -68,19 +68,19 @@ public class OmitZeroContributingBOScannerTest {
 	/**
 	 * Does not contribute to any goal
 	 */
-	TestBo bo1;
+	LTestBo bo1;
 	/**
 	 * Contributes to goal1 by 0.0
 	 */
-	TestBo bo2;
+	LTestBo bo2;
 	/**
 	 * Contributes to goal1 by 1.0 and goal2 by 0.0
 	 */
-	TestBo bo3;
+	LTestBo bo3;
 
 	LaraDecisionConfiguration													dBuilder;
 
-	LaraBOCollector<TestAgent, TestBo> scanner;
+	LaraBOCollector<LTestAgent, LTestBo> scanner;
 
 	/**
 	 * @throws java.lang.Exception
@@ -107,28 +107,30 @@ public class OmitZeroContributingBOScannerTest {
 		Class<? extends LaraPreference> goal2 = new LaraPreference() {
 		}.getClass();
 
-		agent = new TestAgent("TestAgent");
+		agent = new LTestAgent("LTestAgent");
 		Map<Class<? extends LaraPreference>, Double> utilities = new HashMap<Class<? extends LaraPreference>, Double>();
-		bo1 = new TestBo(agent, utilities);
+		bo1 = new LTestBo(agent, utilities);
 		utilities.put(goal1, 0.0);
-		bo2 = new TestBo(agent, utilities);
+		bo2 = new LTestBo(agent, utilities);
 		utilities.put(goal1, 1.0);
 		utilities.put(goal2, 0.0);
-		bo3 = new TestBo(agent, utilities);
+		bo3 = new LTestBo(agent, utilities);
 
-		memory = new LDefaultLimitedCapacityBOMemory<TestBo>(
-				LCapacityManagers.<TestBo> makeNINO());
+		memory = new LDefaultLimitedCapacityBOMemory<LTestBo>(
+				LCapacityManagers.<LTestBo> makeNINO());
 
 		agent.getLaraComp().setBOMemory(memory);
 
 		dBuilder = new LDecisionConfiguration("TestDecision");
-		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(dBuilder, new LDecisionHeuristicComponent_MaxLineTotalRandomAtTie());
+		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(dBuilder,
+				LDeliberativeChoiceComp_MaxLineTotalRandomAtTie
+						.getInstance(null));
 		List<Class<? extends LaraPreference>> goals = new ArrayList<Class<? extends LaraPreference>>();
 		goals.add(goal1);
 		goals.add(goal2);
 		dBuilder.setPreferences(goals);
 
-		scanner = new LOmitZeroContributingBOCollector<TestAgent, TestBo>();
+		scanner = new LOmitZeroContributingBOCollector<LTestAgent, LTestBo>();
 	}
 
 	/**

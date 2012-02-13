@@ -17,7 +17,7 @@ import de.cesr.lara.components.agents.LaraAgent;
 import de.cesr.lara.components.agents.impl.LDefaultAgentComp;
 import de.cesr.lara.components.decision.LaraDecisionConfiguration;
 import de.cesr.lara.components.decision.impl.LDecisionConfiguration;
-import de.cesr.lara.components.decision.impl.LDecisionHeuristicComponent_MaxLineTotalRandomAtTie;
+import de.cesr.lara.components.decision.impl.LDeliberativeChoiceComp_MaxLineTotalRandomAtTie;
 import de.cesr.lara.components.preprocessor.LaraPreprocessor;
 import de.cesr.lara.components.preprocessor.LaraPreprocessorConfigurator;
 import de.cesr.lara.components.preprocessor.impl.LContributingBoCollector;
@@ -28,6 +28,7 @@ import de.cesr.lara.components.preprocessor.impl.LPseudoPrefereceUpdater;
 import de.cesr.lara.components.util.logging.impl.Log4jLogger;
 
 /**
+ * TODO Refactor!!!
  * 
  */
 public class LDecisionEvaluationToolbox {
@@ -49,7 +50,7 @@ public class LDecisionEvaluationToolbox {
 	 * @param <A>
 	 * @param <BO>
 	 * @param configurator
-	 * @param dBuilder
+	 * @param dConfig
 	 * @return configurator
 	 */
 	public static <A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<A, BO>> LaraPreprocessor<A, BO> getPostProcessPreprocessBuilder(
@@ -68,16 +69,18 @@ public class LDecisionEvaluationToolbox {
 	}
 
 	/**
-	 * TODO make generic
+	 * 
 	 */
 	public <A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<A, BO>> void evaluateSelectedBoAgainstOpimalBo(
 			LaraPreprocessorConfigurator<A, BO> configurator, LaraDecisionConfiguration dBuilder, A agent) {
-		// exchange dBuilder because of autonomous random stream for LaraDeliberativeChoiceComponent:
+		// exchange dConfig because of autonomous random stream for LaraDeliberativeChoiceComponent:
 
 		LaraDecisionConfiguration postProcessDBuilder = new LDecisionConfiguration("NeighbourhoodDecisionBuilder");
-		// make sure that the heuristic as used in decisionData is used
+		// make sure that the deliberativeChoiceComp as used in decisionData is used
 				
-		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(postProcessDBuilder, new LDecisionHeuristicComponent_MaxLineTotalRandomAtTie("Uniform post-processing"));
+		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(postProcessDBuilder,
+				LDeliberativeChoiceComp_MaxLineTotalRandomAtTie
+						.getInstance("Uniform post-processing"));
 		postProcessDBuilder.setPreferences(dBuilder.getPreferences());
 
 		// perform a deliberative decision:
