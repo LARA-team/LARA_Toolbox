@@ -36,7 +36,7 @@ public abstract class LAbstractSNBO<A extends LaraAgent<A, BO>, BO extends LAbst
 	}
 
 	/**
-	 * @param dBuilder
+	 * @param dConfig
 	 */
 	@Override
 	public Map<Class<? extends LaraPreference>, Double> getSituationalUtilities(LaraDecisionConfiguration dConfiguration) {
