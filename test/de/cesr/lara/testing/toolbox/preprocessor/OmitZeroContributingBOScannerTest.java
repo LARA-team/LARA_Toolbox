@@ -50,8 +50,8 @@ import de.cesr.lara.components.preprocessor.impl.LOmitZeroContributingBOCollecto
 import de.cesr.lara.components.util.LaraRandom;
 import de.cesr.lara.components.util.impl.LCapacityManagers;
 import de.cesr.lara.components.util.impl.LRandomService;
-import de.cesr.lara.testing.TestUtils.LTestAgent;
-import de.cesr.lara.testing.TestUtils.LTestBo;
+import de.cesr.lara.testing.LTestUtils.LTestAgent;
+import de.cesr.lara.testing.LTestUtils.LTestBo;
 
 /**
  * TODO why placed in toolbox (SH)?
