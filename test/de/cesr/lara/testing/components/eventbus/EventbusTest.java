@@ -41,8 +41,8 @@ import de.cesr.lara.toolbox.runtime.SimplePerformanceStatistics;
  */
 public class EventbusTest {
 
-	private static final int numberOfSubscribers = 100000000;
-	private static final int numberOfWasteCpuTimeCycles = 100;
+	private static final int numberOfSubscribers = 2000000;
+	private static final int numberOfWasteCpuTimeCycles = 10;
 
 	private class TestEnvironment {
 		private int counter = 0;
