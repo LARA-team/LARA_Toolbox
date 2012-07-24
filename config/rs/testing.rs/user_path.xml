@@ -1,0 +1,5 @@
+<model name="LARA_Test">
+<classpath>
+<agents path="..//bin,..//bin-groovy" />
+</classpath>
+</model>

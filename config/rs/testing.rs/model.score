@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ASCII"?>
+<score:SContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:score="http://scoreabm.org/score" label="KUBUS" ID="kUBUS" pluralLabel="KUBUSs">
+  <implementation package="core" className="ContextCreator" basePath="../KUBUS_Proto01" mode="AUTO" binDir="bin,lib/MORe.jar,lib/jung-io-2.0.1.jar"/>
+  <agents label="KUBUSAgent" ID="Household" pluralLabel="KUBUSAgents">
+    <implementation package="agents" className="AbstractHousehold" basePath=""/>
+  </agents>
+  <agents label="AreaContextAgent" ID="AreaContextAgent" pluralLabel="AreaContextAgents">
+    <implementation package="contexts" className="AreaContext"/>
+  </agents>
+  <agents xsi:type="score:SContext" label="AreaContext" ID="AreaContext" pluralLabel="AreaContexts">
+    <implementation package="contexts" className="AreaContext" mode="AUTO"/>
+    <agents label="MarketCellContext" ID="MarketCellContext" pluralLabel="MarketCellContexts">
+      <implementation className="MarketCellContext"/>
+      <styles xsi:type="score:SStyle2D" label="MarketCellContextStyle2D" ID="marketCellContextStyle2D">
+        <implementation package="contexts/style" className="MarketCellContextStyle2D"/>
+      </styles>
+    </agents>
+    <projections xsi:type="score:SGeography" label="MZGeography" ID="MZGeography" pluralLabel="MZGeographys"/>
+  </agents>
+  <agents label="LeadingAgent" ID="LeadingAgent" pluralLabel="LeadingAgents">
+    <implementation package="agents" className="LeadingHousehold"/>
+  </agents>
+  <agents label="SimKlAEdge" ID="SimKlAEdge" pluralLabel="SimKlAEdges">
+    <implementation package="socnet" className="SimKlAEdge"/>
+  </agents>
+  <agents label="TraditionalAgent" ID="TraditionalAgent" pluralLabel="TraditionalAgents">
+    <implementation package="agents" className="TraditionalHousehold"/>
+  </agents>
+  <agents label="NeighbourhoodContext" ID="NeighbourhoodContext" pluralLabel="NeighbourhoodContexts">
+    <implementation package="contexts" className="NeighbourhoodContext"/>
+  </agents>
+  <projections xsi:type="score:SGeography" label="AreaGeography" ID="areaGeography" pluralLabel="AreaGeographys"/>
+  <projections xsi:type="score:SNetwork" label="socialNetwork" ID="socialNet" pluralLabel="socialNetworks"/>
+</score:SContext>

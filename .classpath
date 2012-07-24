@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LARA_Base"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/repast.simphony.bin_and_src.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
