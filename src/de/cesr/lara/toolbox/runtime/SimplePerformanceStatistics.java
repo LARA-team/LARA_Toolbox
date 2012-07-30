@@ -1,3 +1,22 @@
+/**
+ * This file is part of
+ * 
+ * LARA - Lightweight Architecture for boundedly Rational citizen Agents
+ * 
+ * Copyright (C) 2012 Center for Environmental Systems Research, Kassel, Germany
+ * 
+ * LARA is free software: You can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * LARA is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package de.cesr.lara.toolbox.runtime;
 
 import java.io.File;
@@ -72,39 +91,6 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 		init(eventbus, eventsToTrack);
 	}
 
-	private void subscribeToEvents(Set<Class> eventsToTrack) {
-		for (Class eventClass : eventsToTrack) {
-			eventBus.subscribe(this, eventClass);
-		}
-	}
-
-	/**
-	 * initializes the output. creates a new file to write to. writes the header
-	 * to the file.
-	 */
-	private void init(LEventbus eventbus, Set<Class> eventsToTrack) {
-		timestamp = Calendar.getInstance().getTimeInMillis();
-		eventBus = eventbus;
-		subscribeToEvents(eventsToTrack);
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-		filename = "output" + File.separator + "performance" + File.separator
-				+ "performance_"
-				+ dateFormat.format(Calendar.getInstance().getTime()) + ".csv";
-		File outdir = new File("output" + File.separator + "performance");
-		outdir.mkdirs();
-		try {
-			FileWriter fileWriter = new FileWriter(new File(filename), false);
-			// write header
-			String line = "Event" + valueSep + "ExecutionTime (millis)"
-					+ valueSep + "Memory (bytes)" + valueSep + "Meta";
-			line += lineSep;
-			fileWriter.append(line);
-			fileWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * appends current stats to the output file
 	 * 
@@ -141,4 +127,38 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 	public void onInternalEvent(LaraEvent event) {
 		appendCurrentStats(event, "internal");
 	}
+
+	/**
+	 * initializes the output. creates a new file to write to. writes the header
+	 * to the file.
+	 */
+	private void init(LEventbus eventbus, Set<Class> eventsToTrack) {
+		timestamp = Calendar.getInstance().getTimeInMillis();
+		eventBus = eventbus;
+		subscribeToEvents(eventsToTrack);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+		filename = "output" + File.separator + "performance" + File.separator
+				+ "performance_"
+				+ dateFormat.format(Calendar.getInstance().getTime()) + ".csv";
+		File outdir = new File("output" + File.separator + "performance");
+		outdir.mkdirs();
+		try {
+			FileWriter fileWriter = new FileWriter(new File(filename), false);
+			// write header
+			String line = "Event" + valueSep + "ExecutionTime (millis)"
+					+ valueSep + "Memory (bytes)" + valueSep + "Meta";
+			line += lineSep;
+			fileWriter.append(line);
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void subscribeToEvents(Set<Class> eventsToTrack) {
+		for (Class eventClass : eventsToTrack) {
+			eventBus.subscribe(this, eventClass);
+		}
+	}
+
 }
