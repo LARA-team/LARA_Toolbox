@@ -48,10 +48,15 @@ import de.cesr.lara.components.model.impl.LAbstractModel;
  * Instructions:
  * Calls <code>LEventbus.getInstance().publish(new LModelInstantiatedEvent());</code> 
  * in your {@link ContextBuilder#build(repast.simphony.context.Context)} method!
+ *
+ * @author Sascha Holzhauer
+ *
+ * @param <A> Agent class
+ * @param <BO> BO class
+ * @param <C> Type the root context is suitable for (mostly Object)
  */
-public abstract class LAbstractRsModel<A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<?, ? extends BO>> 
-	extends LAbstractModel implements LaraEventSubscriber,
-		ContextBuilder<A>{
+public abstract class LAbstractRsModel<A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<?, ? extends BO>, C> 
+	extends LAbstractModel implements LaraEventSubscriber, ContextBuilder<C>{
 
 	
 	/**

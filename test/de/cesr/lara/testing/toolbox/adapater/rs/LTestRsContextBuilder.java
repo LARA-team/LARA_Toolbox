@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
 import de.cesr.lara.components.LaraPreference;
-import de.cesr.lara.components.agents.LaraAgent;
 import de.cesr.lara.components.agents.impl.LDefaultAgentComp;
 import de.cesr.lara.components.decision.LaraDecisionConfiguration;
 import de.cesr.lara.components.decision.impl.LDecisionConfiguration;
@@ -36,11 +35,8 @@ import de.cesr.lara.testing.LTestUtils.LTestPreference1;
 import de.cesr.lara.testing.LTestUtils.LTestPreference2;
 import de.cesr.lara.toolbox.adapter.rs.LAbstractRsModel;
 
-public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo> {
+public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo, Object> {
 
-		/**
-		 * Logger
-		 */
 		private Logger logger = Log4jLogger
 				.getLogger(LTestRsContextBuilder.class);
 
@@ -49,11 +45,11 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo>
 		 */
 		private LaraDecisionConfiguration decisionOneConfiguration;
 		
-		private Context<LTestAgent> rootContext;
+		private Context<Object> rootContext;
 
 
 		@Override
-		public Context<LTestAgent> build(Context<LTestAgent> context) {
+		public Context<Object> build(Context<Object> context) {
 			RunEnvironment.getInstance().endAt(10.0);
 			LEventbus.getInstance().subscribe(this, LModelInitializedEvent.class);
 		
@@ -128,10 +124,9 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo>
 		 */
 		private void dumpAgentInfo() {
 			// log the agents preferenceWeights for debugging reasons
-			for (LaraAgent<?, ?> agent : rootContext) {
-				logger.info("  " + agent.getAgentId() + ": ");
-				for (Entry<Class<? extends LaraPreference>, Double> entry : agent
-						.getLaraComp().getPreferenceWeights().entrySet()) {
+			for (Object agent : rootContext) {
+				logger.info("  " + ((LTestAgent)agent).getAgentId() + ": ");
+				for (Entry<Class<? extends LaraPreference>, Double> entry : ((LTestAgent)agent).getLaraComp().getPreferenceWeights().entrySet()) {
 					logger.info("     preference for "
 							+ entry.getKey().getSimpleName() + " : "
 							+ entry.getValue());
@@ -191,6 +186,13 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo>
 
 		@Override
 		protected Iterable<LTestAgent> getAgentIterable() {
-			return rootContext.getAgentLayer(LTestAgent.class);
+			Set<LTestAgent> agents = new HashSet<LTestAgent>();
+			
+			for (Object o : rootContext.getObjects(LTestAgent.class)) {
+				if (o instanceof LTestAgent) {
+					agents.add((LTestAgent)o);
+				}
+			}
+			return agents;
 		}
 	}
