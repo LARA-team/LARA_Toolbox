@@ -46,8 +46,12 @@ import de.cesr.lara.components.model.impl.LAbstractModel;
  * </ul>
  * 
  * Instructions:
- * Calls <code>LEventbus.getInstance().publish(new LModelInstantiatedEvent());</code> 
+ * Call <code>LEventbus.getInstance().publish(new LModelInstantiatedEvent());</code> 
  * in your {@link ContextBuilder#build(repast.simphony.context.Context)} method!
+ * 
+ * NOTE: Your context creation class MUST implement ContextBuilder<Object> at its own
+ * since Repast Simphony is not able (why so ever) to check whether super-classes extend/implement the
+ * interface!!
  *
  * @author Sascha Holzhauer
  *
