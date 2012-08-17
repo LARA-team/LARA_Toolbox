@@ -14,7 +14,7 @@
 	  		  javahl="false"
 	          username="holzhauer"
 	          password="holzhauer">
-    		<info target="${basedir}/../../src/de/cesr/lara/components/util/impl/LVersionInfo.java"/>
+    		<info target="${basedir}/../../src/de/cesr/lara/toolbox/util/LVersionInfo.java"/>
     	</svn>
     	<echo>"Last Revision: ${svn.info.rev}"</echo>
     </target>
