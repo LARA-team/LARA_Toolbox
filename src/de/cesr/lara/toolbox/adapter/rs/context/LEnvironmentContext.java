@@ -21,6 +21,11 @@ public class LEnvironmentContext<T> extends DefaultContext<T> implements LaraEnv
 	LaraEnvironment lEnvironment = null;
 	
 	public LEnvironmentContext() {
+		this("LEnvironmentContext");
+	}
+	
+	public LEnvironmentContext(String id) {
+		super(id);
 		lEnvironment = new LEnvironment();
 	}
 	
