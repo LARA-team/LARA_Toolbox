@@ -36,7 +36,8 @@ import de.cesr.lara.components.model.impl.LAbstractModel;
 
 /**
  * For Repast Simphony Models, a context builder (a class implementing
- * {@link ContextBuilder} builds up the model (at least its main context) and schedules actions.
+ * {@link ContextBuilder} builds up the model (at least its main context) and
+ * schedules actions.
  * 
  * Therefore, the {@link LAbstractRsModel} serves as
  * <ul>
@@ -45,19 +46,28 @@ import de.cesr.lara.components.model.impl.LAbstractModel;
  * <li>Repast Simphony {@link ContextBuilder}.
  * </ul>
  * 
- * Instructions:
- * Call <code>LEventbus.getInstance().publish(new LModelInstantiatedEvent());</code> 
+ * Instructions: Call
+ * <code>LEventbus.getInstance().publish(new LModelInstantiatedEvent());</code>
  * in your {@link ContextBuilder#build(repast.simphony.context.Context)} method!
  * 
- * NOTE: Your context creation class MUST implement ContextBuilder<Object> at its own
- * since Repast Simphony is not able (why so ever) to check whether super-classes extend/implement the
+ * NOTE: Your context creation class MUST implement ContextBuilder<C> at its own
+ * (implementing the build(Context<C> context) method) since Repast Simphony is
+ * not able (why so ever) to check whether super-classes extend/implement the
  * interface!!
- *
+ * 
+ * NOTE: Do not call
+ * <code>RunEnvironment.getInstance().getCurrentSchedule().schedule(this);</code>
+ * in your subclass (otherwise, the stepping method is called more than one per
+ * tick)!
+ * 
  * @author Sascha Holzhauer
- *
- * @param <A> Agent class
- * @param <BO> BO class
- * @param <C> Type the root context is suitable for (mostly Object)
+ * 
+ * @param <A>
+ *            Agent class
+ * @param <BO>
+ *            BO class
+ * @param <C>
+ *            Type the root context is suitable for (mostly Object)
  */
 public abstract class LAbstractRsModel<A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<?, ? extends BO>, C> 
 	extends LAbstractModel implements LaraEventSubscriber, ContextBuilder<C>{
@@ -75,10 +85,16 @@ public abstract class LAbstractRsModel<A extends LaraAgent<A, BO>, BO extends La
 	}
 
 	/**
-	 * This method should be called in your {@link ContextBuilder#build(repast.simphony.context.Context)}!
+	 * This method should be called in your
+	 * {@link ContextBuilder#build(repast.simphony.context.Context)}!
 	 * 
-	 * Schedules methods at RS schedule and publishes a {@link LModelInstantiatedEvent}.
-	 * Sets consistent random seed.
+	 * Schedules methods at RS schedule and publishes a
+	 * {@link LModelInstantiatedEvent}. Sets consistent random seed.
+	 * 
+	 * NOTE: Do not call
+	 * <code>RunEnvironment.getInstance().getCurrentSchedule().schedule(this);</code>
+	 * in your subclass (otherwise, the stepping method is called more than one
+	 * per tick)!
 	 */
 	protected void initRsModel() {
 		RunEnvironment.getInstance().getCurrentSchedule().schedule(this);
