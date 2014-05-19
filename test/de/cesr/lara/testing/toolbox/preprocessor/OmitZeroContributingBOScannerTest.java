@@ -99,6 +99,12 @@ public class OmitZeroContributingBOScannerTest {
 			@Override
 			public void onInternalEvent(LaraEvent event) {
 			}
+
+			@Override
+			public <T extends LaraEvent> void onEvent(T event) {
+				// TODO Auto-generated method stub
+
+			}
 		});
 		((LAbstractModel) LModel.getModel()).init();
 

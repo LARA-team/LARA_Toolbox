@@ -20,7 +20,7 @@ import de.cesr.lara.components.eventbus.events.LAgentExecutionEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPerceptionEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPostprocessEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPreprocessEvent;
-import de.cesr.lara.components.eventbus.events.LModelInitializedEvent;
+import de.cesr.lara.components.eventbus.events.LInternalModelInitializedEvent;
 import de.cesr.lara.components.eventbus.events.LModelInstantiatedEvent;
 import de.cesr.lara.components.eventbus.events.LModelStepEvent;
 import de.cesr.lara.components.eventbus.events.LaraEvent;
@@ -51,7 +51,7 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo,
 		@Override
 		public Context<Object> build(Context<Object> context) {
 			RunEnvironment.getInstance().endAt(10.0);
-			LEventbus.getInstance().subscribe(this, LModelInitializedEvent.class);
+			LEventbus.getInstance().subscribe(this, LInternalModelInitializedEvent.class);
 		
 			this.rootContext = context;
 			
@@ -62,7 +62,7 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo,
 
 		@Override
 		public <T extends LaraEvent> void onEvent(T event) {
-			if (event instanceof LModelInitializedEvent) {
+			if (event instanceof LInternalModelInitializedEvent) {
 				createAgents();
 				initLara();
 			} else if (event instanceof LModelStepEvent) {
