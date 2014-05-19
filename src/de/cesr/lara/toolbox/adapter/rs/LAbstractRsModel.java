@@ -50,6 +50,9 @@ import de.cesr.lara.components.model.impl.LAbstractModel;
  * <code>LEventbus.getInstance().publish(new LModelInstantiatedEvent());</code>
  * in your {@link ContextBuilder#build(repast.simphony.context.Context)} method!
  * 
+ * Furthermore, implement {@link LaraEventSubscriber#onEvent(LaraEvent)} and
+ * trigger the decision process when {@link LModelStepEvent}s are triggered.
+ * 
  * NOTE: Your context creation class MUST implement ContextBuilder<C> at its own
  * (implementing the build(Context<C> context) method) since Repast Simphony is
  * not able (why so ever) to check whether super-classes extend/implement the
@@ -57,7 +60,7 @@ import de.cesr.lara.components.model.impl.LAbstractModel;
  * 
  * NOTE: Do not call
  * <code>RunEnvironment.getInstance().getCurrentSchedule().schedule(this);</code>
- * in your subclass (otherwise, the stepping method is called more than one per
+ * in your subclass (otherwise, the stepping method is called more than once per
  * tick)!
  * 
  * @author Sascha Holzhauer
@@ -88,16 +91,16 @@ public abstract class LAbstractRsModel<A extends LaraAgent<A, BO>, BO extends La
 	 * This method should be called in your
 	 * {@link ContextBuilder#build(repast.simphony.context.Context)}!
 	 * 
-	 * Schedules methods at RS schedule and publishes a
-	 * {@link LModelInstantiatedEvent}. Sets consistent random seed.
+	 * Schedules methods at RS schedule and sets consistent random seed.
 	 * 
 	 * NOTE: Do not call
 	 * <code>RunEnvironment.getInstance().getCurrentSchedule().schedule(this);</code>
-	 * in your subclass (otherwise, the stepping method is called more than one
+	 * in your subclass (otherwise, the stepping method is called more than once
 	 * per tick)!
 	 */
 	protected void initRsModel() {
 		RunEnvironment.getInstance().getCurrentSchedule().schedule(this);
+		// TODO remove and test -duplicate (also scheduled at method!) SH
 		RunEnvironment
 				.getInstance()
 				.getCurrentSchedule()

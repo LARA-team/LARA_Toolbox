@@ -36,7 +36,7 @@ import de.cesr.lara.components.eventbus.events.LAgentPerceptionEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPostprocessEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPreprocessEvent;
 import de.cesr.lara.components.eventbus.events.LModelFinishEvent;
-import de.cesr.lara.components.eventbus.events.LModelInitializedEvent;
+import de.cesr.lara.components.eventbus.events.LInternalModelInitializedEvent;
 import de.cesr.lara.components.eventbus.events.LModelInstantiatedEvent;
 import de.cesr.lara.components.eventbus.events.LModelStepEvent;
 import de.cesr.lara.components.eventbus.events.LModelStepFinishedEvent;
@@ -73,7 +73,7 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 		eventsToTrack.add(LAgentPostprocessEvent.class);
 		eventsToTrack.add(LAgentPreprocessEvent.class);
 		eventsToTrack.add(LModelFinishEvent.class);
-		eventsToTrack.add(LModelInitializedEvent.class);
+		eventsToTrack.add(LInternalModelInitializedEvent.class);
 		eventsToTrack.add(LModelInstantiatedEvent.class);
 		eventsToTrack.add(LModelStepEvent.class);
 		eventsToTrack.add(LModelStepFinishedEvent.class);
