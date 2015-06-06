@@ -3,8 +3,8 @@ package de.cesr.lara.testing.toolbox.adapater.rs;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -25,14 +25,13 @@ import de.cesr.lara.components.eventbus.events.LModelInstantiatedEvent;
 import de.cesr.lara.components.eventbus.events.LModelStepEvent;
 import de.cesr.lara.components.eventbus.events.LaraEvent;
 import de.cesr.lara.components.eventbus.impl.LEventbus;
+import de.cesr.lara.components.model.impl.LModel;
 import de.cesr.lara.components.preprocessor.LaraPreprocessorConfigurator;
 import de.cesr.lara.components.preprocessor.impl.LContributingBoCollector;
 import de.cesr.lara.components.preprocessor.impl.LPreprocessorConfigurator;
 import de.cesr.lara.components.util.logging.impl.Log4jLogger;
 import de.cesr.lara.testing.LTestUtils.LTestAgent;
 import de.cesr.lara.testing.LTestUtils.LTestBo;
-import de.cesr.lara.testing.LTestUtils.LTestPreference1;
-import de.cesr.lara.testing.LTestUtils.LTestPreference2;
 import de.cesr.lara.toolbox.adapter.rs.LAbstractRsModel;
 
 public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo, Object> {
@@ -76,9 +75,11 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo,
 			
 			logger.info("creating agents");
 
-			Set<Class<? extends LaraPreference>> goals = new HashSet<Class<? extends LaraPreference>>();
-			goals.add(LTestPreference1.class);
-			goals.add(LTestPreference2.class);
+		Set<LaraPreference> goals = new HashSet<LaraPreference>();
+		goals.add(LModel.getModel().getPrefRegistry()
+				.register("TestPreference1"));
+		goals.add(LModel.getModel().getPrefRegistry()
+				.register("TestPreference2"));
 
 			// create two agents
 			createAgent("Zero", goals);
@@ -100,12 +101,11 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo,
 		 * @param goals
 		 */
 		private void createAgent(String agentId,
-				Set<Class<? extends LaraPreference>> goals) {
+ Set<LaraPreference> goals) {
 			LTestAgent agent = new LTestAgent(agentId);
 					
-			Class<? extends LaraPreference> goal1 = new LaraPreference() {
-			}.getClass();
-			Map<Class<? extends LaraPreference>, Double> utilities = new HashMap<Class<? extends LaraPreference>, Double>();
+		LaraPreference goal1 = LModel.getModel().getPrefRegistry().get("goal1");
+		Map<LaraPreference, Double> utilities = new HashMap<LaraPreference, Double>();
 			LTestBo bo1 = new LTestBo(agent, utilities);
 			utilities.put(goal1, 0.0);
 			agent.getLaraComp().getBOMemory().memorize(bo1);
@@ -113,7 +113,7 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo,
 			rootContext.add(agent);
 		}
 		
-		public void initDecisions(Set<Class<? extends LaraPreference>> goals) {
+	public void initDecisions(Set<LaraPreference> goals) {
 			// initialize decision builder (configuration for decision process)
 			decisionOneConfiguration = new LDecisionConfiguration("decision one");
 			decisionOneConfiguration.setPreferences(goals);
@@ -126,9 +126,11 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo,
 			// log the agents preferenceWeights for debugging reasons
 			for (Object agent : rootContext) {
 				logger.info("  " + ((LTestAgent)agent).getAgentId() + ": ");
-				for (Entry<Class<? extends LaraPreference>, Double> entry : ((LTestAgent)agent).getLaraComp().getPreferenceWeights().entrySet()) {
+			for (Entry<LaraPreference, Double> entry : ((LTestAgent) agent)
+					.getLaraComp().getPreferenceWeights().entrySet()) {
 					logger.info("     preference for "
-							+ entry.getKey().getSimpleName() + " : "
+ + entry.getKey().getId()
+						+ " : "
 							+ entry.getValue());
 				}
 			}
@@ -175,9 +177,11 @@ public class LTestRsContextBuilder extends LAbstractRsModel<LTestAgent, LTestBo,
 			configurator.setBOCollector(new LContributingBoCollector<LTestAgent, LTestBo>(), 
 					decisionOneConfiguration);
 
-			LDefaultAgentComp.setDefaultDeliberativeChoiceComp(decisionOneConfiguration,
+		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(LModel.getModel(),
+				decisionOneConfiguration,
 					LDeliberativeChoiceComp_MaxLineTotalRandomAtTie
-							.getInstance(null));
+.getInstance(
+						null, null));
 
 			// createAgents:
 

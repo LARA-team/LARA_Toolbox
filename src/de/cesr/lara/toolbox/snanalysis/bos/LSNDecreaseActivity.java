@@ -41,15 +41,15 @@ public abstract class LSNDecreaseActivity<A extends LaraAgent<A, LSNDecreaseActi
 	 * @param utilities
 	 */
 	public LSNDecreaseActivity(String key, A agent,
-			Map<Class<? extends LaraPreference>, Double> utilities) {
+			Map<LaraPreference, Double> utilities) {
 		super(key, agent, utilities);
 	}
 
 	/**
-	 * @see de.cesr.lara.toolbox.snanalysis.bos.LAbstractSNBO#computeUtility(Class)
+	 * @see de.cesr.lara.toolbox.snanalysis.bos.LAbstractSNBO#computeUtility(LaraPreference)
 	 */
 	@Override
-	public boolean computeUtility(Class<? extends LaraPreference> goal) {
+	public boolean computeUtility(LaraPreference goal) {
 		// TODO Auto-generated method stub
 		return false;
 	}

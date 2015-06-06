@@ -30,6 +30,7 @@ import de.cesr.lara.components.agents.impl.LDefaultAgentComp;
 import de.cesr.lara.components.decision.LaraDecisionConfiguration;
 import de.cesr.lara.components.decision.impl.LDecisionConfiguration;
 import de.cesr.lara.components.decision.impl.LDeliberativeChoiceComp_MaxLineTotalRandomAtTie;
+import de.cesr.lara.components.model.LaraModel;
 import de.cesr.lara.components.preprocessor.LaraPreprocessor;
 import de.cesr.lara.components.preprocessor.LaraPreprocessorConfigurator;
 import de.cesr.lara.components.preprocessor.impl.LContributingBoCollector;
@@ -88,9 +89,14 @@ public class LDecisionEvaluationToolbox {
 	}
 
 	/**
+	 * @param lmodel
+	 * @param configurator
+	 * @param dBuilder
+	 * @param agent
 	 * 
 	 */
 	public <A extends LaraAgent<A, BO>, BO extends LaraBehaviouralOption<A, BO>> void evaluateSelectedBoAgainstOpimalBo(
+			LaraModel lmodel,
 			LaraPreprocessorConfigurator<A, BO> configurator,
 			LaraDecisionConfiguration dBuilder, A agent) {
 		// exchange dConfig because of autonomous random stream for
@@ -101,9 +107,10 @@ public class LDecisionEvaluationToolbox {
 		// make sure that the deliberativeChoiceComp as used in decisionData is
 		// used
 
-		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(postProcessDBuilder,
-				LDeliberativeChoiceComp_MaxLineTotalRandomAtTie
-						.getInstance("Uniform post-processing"));
+		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(lmodel,
+				postProcessDBuilder,
+				LDeliberativeChoiceComp_MaxLineTotalRandomAtTie.getInstance(
+						lmodel, "Uniform post-processing"));
 		postProcessDBuilder.setPreferences(dBuilder.getPreferences());
 
 		// perform a deliberative decision:

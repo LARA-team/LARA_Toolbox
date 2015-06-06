@@ -25,6 +25,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import de.cesr.lara.testing.toolbox.adapater.rs.AllAdapterRsTests;
+import de.cesr.lara.testing.toolbox.config.xml.AllConfigToolboxTests;
 import de.cesr.lara.testing.toolbox.preprocessor.AllPreprocessorToolboxTests;
 
 
@@ -35,7 +36,8 @@ import de.cesr.lara.testing.toolbox.preprocessor.AllPreprocessorToolboxTests;
  * 
  */
 @RunWith(Suite.class)
-@SuiteClasses( { AllPreprocessorToolboxTests.class, AllAdapterRsTests.class })
+@SuiteClasses({ AllPreprocessorToolboxTests.class, AllAdapterRsTests.class,
+		AllConfigToolboxTests.class })
 public class AllToolboxTests {
 
 }

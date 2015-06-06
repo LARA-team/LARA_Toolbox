@@ -1,0 +1,12 @@
+<decisonConfigurations>
+	<dConfig>
+		<id>DecisionA</id>
+		<preference>PreferenceA</preference>
+		<preference>PreferenceB</preference>
+	</dConfig>
+	<dConfig>
+		<id>DecisionB</id>
+		<preference>PreferenceA</preference>
+		<preference>PreferenceC</preference>
+	</dConfig>
+</decisonConfigurations>

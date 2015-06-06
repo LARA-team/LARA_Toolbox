@@ -23,7 +23,6 @@ import java.util.Map;
 
 import de.cesr.lara.components.LaraPreference;
 import de.cesr.lara.components.agents.LaraAgent;
-import de.cesr.lara.toolbox.snanalysis.goals.LSNAttendCenralActors;
 
 /**
  * 
@@ -42,13 +41,13 @@ public class LSNCutLeastCentralLinks<A extends LaraAgent<A, LSNDecreaseActivity<
 	 * @param utilities
 	 */
 	public LSNCutLeastCentralLinks(String key, A agent,
-			Map<Class<? extends LaraPreference>, Double> utilities) {
+			Map<LaraPreference, Double> utilities) {
 		super(key, agent, utilities);
 	}
 
 	@Override
-	public boolean computeUtility(Class<? extends LaraPreference> goal) {
-		if (goal == LSNAttendCenralActors.class) {
+	public boolean computeUtility(LaraPreference goal) {
+		if (goal.getId().equals("LSNAttendCenralActors")) {
 			// TODO implement utility updating
 		}
 		return true;
@@ -56,7 +55,7 @@ public class LSNCutLeastCentralLinks<A extends LaraAgent<A, LSNDecreaseActivity<
 
 	@Override
 	public LSNCutLeastCentralLinks<A> getModifiedBO(A agent,
-			Map<Class<? extends LaraPreference>, Double> utilities) {
+			Map<LaraPreference, Double> utilities) {
 		return new LSNCutLeastCentralLinks<A>(getKey(), agent, utilities);
 	}
 

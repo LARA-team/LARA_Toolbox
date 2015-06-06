@@ -32,13 +32,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.cesr.lara.components.LaraPreference;
-import de.cesr.lara.components.agents.LaraAgent;
 import de.cesr.lara.components.agents.impl.LDefaultAgentComp;
 import de.cesr.lara.components.container.memory.LaraBOMemory;
 import de.cesr.lara.components.container.memory.impl.LDefaultLimitedCapacityBOMemory;
 import de.cesr.lara.components.decision.LaraDecisionConfiguration;
 import de.cesr.lara.components.decision.impl.LDecisionConfiguration;
 import de.cesr.lara.components.decision.impl.LDeliberativeChoiceComp_MaxLineTotalRandomAtTie;
+import de.cesr.lara.components.eventbus.events.LModelInstantiatedEvent;
 import de.cesr.lara.components.eventbus.events.LaraEvent;
 import de.cesr.lara.components.eventbus.impl.LEventbus;
 import de.cesr.lara.components.model.impl.LAbstractModel;
@@ -90,14 +90,12 @@ public class OmitZeroContributingBOScannerTest {
 		LEventbus.resetAll();
 
 		LModel.setNewModel(new LAbstractStandaloneSynchronisedModel() {
+			
+			{basicInit(null);}
 
 			@Override
 			public LaraRandom getLRandom() {
 				return new LRandomService((int) System.currentTimeMillis());
-			}
-
-			@Override
-			public void onInternalEvent(LaraEvent event) {
 			}
 
 			@Override
@@ -106,15 +104,18 @@ public class OmitZeroContributingBOScannerTest {
 
 			}
 		});
+
+		LEventbus.getInstance().publish(new LModelInstantiatedEvent());
+
 		((LAbstractModel) LModel.getModel()).init();
 
-		Class<? extends LaraPreference> goal1 = new LaraPreference() {
-		}.getClass();
-		Class<? extends LaraPreference> goal2 = new LaraPreference() {
-		}.getClass();
+		LaraPreference goal1 = LModel.getModel().getPrefRegistry()
+				.register("goal1");
+		LaraPreference goal2 = LModel.getModel().getPrefRegistry()
+				.register("goal2");
 
 		agent = new LTestAgent("LTestAgent");
-		Map<Class<? extends LaraPreference>, Double> utilities = new HashMap<Class<? extends LaraPreference>, Double>();
+		Map<LaraPreference, Double> utilities = new HashMap<LaraPreference, Double>();
 		bo1 = new LTestBo(agent, utilities);
 		utilities.put(goal1, 0.0);
 		bo2 = new LTestBo(agent, utilities);
@@ -123,15 +124,17 @@ public class OmitZeroContributingBOScannerTest {
 		bo3 = new LTestBo(agent, utilities);
 
 		memory = new LDefaultLimitedCapacityBOMemory<LTestBo>(
+				LModel.getModel(),
 				LCapacityManagers.<LTestBo> makeNINO());
 
 		agent.getLaraComp().setBOMemory(memory);
 
 		dBuilder = new LDecisionConfiguration("TestDecision");
-		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(dBuilder,
-				LDeliberativeChoiceComp_MaxLineTotalRandomAtTie
-						.getInstance(null));
-		List<Class<? extends LaraPreference>> goals = new ArrayList<Class<? extends LaraPreference>>();
+		LDefaultAgentComp.setDefaultDeliberativeChoiceComp(LModel.getModel(),
+				dBuilder,
+				LDeliberativeChoiceComp_MaxLineTotalRandomAtTie.getInstance(
+LModel.getModel(), null));
+		List<LaraPreference> goals = new ArrayList<LaraPreference>();
 		goals.add(goal1);
 		goals.add(goal2);
 		dBuilder.setPreferences(goals);
@@ -148,7 +151,7 @@ public class OmitZeroContributingBOScannerTest {
 
 	/**
 	 * Test method for
-	 * {@link de.cesr.lara.components.preprocessor.impl.LContributingBoCollector#collectBOs(LaraAgent, de.cesr.lara.components.container.memory.LaraBOMemory, de.cesr.lara.components.decision.LaraDecisionConfiguration)}
+	 * {@link de.cesr.lara.components.preprocessor.impl.LContributingBoCollector#onInternalEvent(LaraEvent)}
 	 * .
 	 */
 	@Test

@@ -38,10 +38,16 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+  compile { transitive = false }
+}
+
 dependencies {
 	compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+	compile group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
 	compile group: 'org.apache.servicemix.bundles', name: 'org.apache.servicemix.bundles.collections-generic', version: '4+'
 	compile group: 'repast.simphony', name: 'repast.simphony.binAndSrc', version: '2.1.+'
+	compile group: 'de.cesr', name: 'parma', version: '0.9.4+'
 	testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
