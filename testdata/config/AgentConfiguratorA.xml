@@ -1,0 +1,55 @@
+<agentConfigurator>
+	<bofile>./bos/listA.xml</bofile>
+	<bofile>./bos/listB.xml</bofile>
+	
+	<preferenceWeight pref="PreferenceA">1.0</preferenceWeight>
+	<preferenceWeight pref="PreferenceB">2.0</preferenceWeight>
+	<preferenceWeight pref="PreferenceC">3.0</preferenceWeight>
+	
+	<preprocessorConfigurator>
+		<selectorEntry>
+			<dConfig>DecisionA</dConfig>
+			<selector class="de.cesr.lara.components.preprocessor.impl.LDefaultDecisionModeSelector">
+			</selector>
+		</selectorEntry>
+		<selectorEntry>
+			<dConfig>DecisionB</dConfig>
+			<selector class="de.cesr.lara.components.preprocessor.impl.LDeliberativeDecisionModeSelector">
+			</selector>
+		</selectorEntry>
+		
+		<collectorEntry>
+			<dConfig>DecisionA</dConfig>
+			<collector class="de.cesr.lara.components.preprocessor.impl.LContributingBoCollector">
+			</collector>
+		</collectorEntry>
+		<collectorEntry>
+			<dConfig>DecisionB</dConfig>
+			<collector class="de.cesr.lara.components.preprocessor.impl.LCompleteBoCollector">
+			</collector>
+		</collectorEntry>
+		
+		<checkerEntry>
+			<dConfig></dConfig>
+			<checker class="de.cesr.lara.components.preprocessor.impl.LDelegatingBoPreselector">
+			</checker>
+		</checkerEntry>
+		
+		<boUpdaterEntry>
+			<dConfig></dConfig>
+			<updater class="de.cesr.lara.components.preprocessor.impl.LDefaultBOUpdater">
+			</updater>
+		</boUpdaterEntry>
+		<boUpdaterEntry>
+			<dConfig>DecisionB</dConfig>
+			<updater class="de.cesr.lara.components.preprocessor.impl.LDefaultBOUpdater">
+			</updater>
+		</boUpdaterEntry>
+		
+		<prefUpdaterEntry>
+			<dConfig></dConfig>
+			<updater class="de.cesr.lara.components.preprocessor.impl.LPseudoPrefereceUpdater">
+			</updater>
+		</prefUpdaterEntry>
+	</preprocessorConfigurator>
+</agentConfigurator>

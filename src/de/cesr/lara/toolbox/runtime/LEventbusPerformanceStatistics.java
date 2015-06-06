@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.cesr.lara.components.eventbus.events.LaraAsynchronousEvent;
+import de.cesr.lara.components.eventbus.events.LaraEvent;
 import de.cesr.lara.components.eventbus.events.LaraSequentialEvent;
 import de.cesr.lara.components.eventbus.events.LaraSynchronousEvent;
 import de.cesr.lara.components.eventbus.impl.LEventbus;
@@ -48,7 +49,7 @@ public class LEventbusPerformanceStatistics {
 	
 	public void testCountSynchronous() {
 		LEventbus eventbus = LEventbus.getInstance("asynchronous");
-		Set<Class> eventsToTrack = new HashSet<Class>();
+		Set<Class<? extends LaraEvent>> eventsToTrack = new HashSet<Class<? extends LaraEvent>>();
 		eventsToTrack.add(TestStartEvent_Synchronous.class);
 		eventsToTrack.add(TestEndEvent_Synchronous.class);
 		eventsToTrack.add(TestDecrementEvent_Asynchronous.class);
@@ -58,7 +59,7 @@ public class LEventbusPerformanceStatistics {
 	
 	public void testCountSequential() {
 		LEventbus eventbus = LEventbus.getInstance("sequential");
-		Set<Class> eventsToTrack = new HashSet<Class>();
+		Set<Class<? extends LaraEvent>> eventsToTrack = new HashSet<Class<? extends LaraEvent>>();
 		eventsToTrack.add(TestStartEvent_Synchronous.class);
 		eventsToTrack.add(TestEndEvent_Synchronous.class);
 		eventsToTrack.add(TestDecrementEvent_Sequential.class);
@@ -68,7 +69,7 @@ public class LEventbusPerformanceStatistics {
 	
 	public void testCountAsynchronous() {
 		LEventbus eventbus = LEventbus.getInstance("asynchronous");
-		Set<Class> eventsToTrack = new HashSet<Class>();
+		Set<Class<? extends LaraEvent>> eventsToTrack = new HashSet<Class<? extends LaraEvent>>();
 		eventsToTrack.add(TestStartEvent_Synchronous.class);
 		eventsToTrack.add(TestEndEvent_Synchronous.class);
 		eventsToTrack.add(TestDecrementEvent_Asynchronous.class);

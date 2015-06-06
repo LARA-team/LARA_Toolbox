@@ -1,0 +1,5 @@
+<preferenceList class="de.cesr.lara.toolbox.config.xml.LXmlPreferenceLoader">
+	<preference>PreferenceA</preference>
+	<preference>PreferenceB</preference>
+	<preference>PreferenceC</preference>
+</preferenceList>

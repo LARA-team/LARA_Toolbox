@@ -25,7 +25,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 
 @RunWith(Suite.class)
-@SuiteClasses({LAbstractRsModelTest.class })
+@SuiteClasses({ LAbstractRsModelTest.class })
 public class AllAdapterRsTests {
 
 }

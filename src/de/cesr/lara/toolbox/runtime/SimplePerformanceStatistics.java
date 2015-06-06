@@ -35,8 +35,8 @@ import de.cesr.lara.components.eventbus.events.LAgentExecutionEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPerceptionEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPostprocessEvent;
 import de.cesr.lara.components.eventbus.events.LAgentPreprocessEvent;
-import de.cesr.lara.components.eventbus.events.LModelFinishEvent;
 import de.cesr.lara.components.eventbus.events.LInternalModelInitializedEvent;
+import de.cesr.lara.components.eventbus.events.LModelFinishEvent;
 import de.cesr.lara.components.eventbus.events.LModelInstantiatedEvent;
 import de.cesr.lara.components.eventbus.events.LModelStepEvent;
 import de.cesr.lara.components.eventbus.events.LModelStepFinishedEvent;
@@ -55,7 +55,6 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 	private String lineSep = "\n";
 	private String valueSep = ";";
 	private LEventbus eventBus;
-	private boolean initialized = false;
 	private long timestamp;
 	private String lastMetaInfo = "undefined";
 	private String lastEvent = "StatsInitialized";
@@ -63,10 +62,10 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 	/**
 	 * creates the file with key as name and header
 	 * 
-	 * @param key
+	 * @param eventbus
 	 */
 	public SimplePerformanceStatistics(LEventbus eventbus) {
-		Set<Class> eventsToTrack = new HashSet<Class>();
+		Set<Class<? extends LaraEvent>> eventsToTrack = new HashSet<Class<? extends LaraEvent>>();
 		eventsToTrack.add(LAgentDecideEvent.class);
 		eventsToTrack.add(LAgentExecutionEvent.class);
 		eventsToTrack.add(LAgentPerceptionEvent.class);
@@ -84,17 +83,19 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 	/**
 	 * creates the file with key as name and header
 	 * 
-	 * @param key
+	 * @param eventbus
+	 * @param eventsToTrack
 	 */
 	public SimplePerformanceStatistics(LEventbus eventbus,
-			Set<Class> eventsToTrack) {
+			Set<Class<? extends LaraEvent>> eventsToTrack) {
 		init(eventbus, eventsToTrack);
 	}
 
 	/**
-	 * appends current stats to the output file
+	 * Appends current stats to the output file
 	 * 
-	 * @param value
+	 * @param event
+	 * @param newMetaInfo
 	 */
 	public void appendCurrentStats(LaraEvent event, String newMetaInfo) {
 		try {
@@ -132,7 +133,8 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 	 * initializes the output. creates a new file to write to. writes the header
 	 * to the file.
 	 */
-	private void init(LEventbus eventbus, Set<Class> eventsToTrack) {
+	private void init(LEventbus eventbus,
+			Set<Class<? extends LaraEvent>> eventsToTrack) {
 		timestamp = Calendar.getInstance().getTimeInMillis();
 		eventBus = eventbus;
 		subscribeToEvents(eventsToTrack);
@@ -155,8 +157,8 @@ public class SimplePerformanceStatistics implements LaraEventSubscriber,
 		}
 	}
 
-	private void subscribeToEvents(Set<Class> eventsToTrack) {
-		for (Class eventClass : eventsToTrack) {
+	private void subscribeToEvents(Set<Class<? extends LaraEvent>> eventsToTrack) {
+		for (Class<? extends LaraEvent> eventClass : eventsToTrack) {
 			eventBus.subscribe(this, eventClass);
 		}
 	}

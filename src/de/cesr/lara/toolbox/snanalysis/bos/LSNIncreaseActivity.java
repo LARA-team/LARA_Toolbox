@@ -23,7 +23,6 @@ import java.util.Map;
 
 import de.cesr.lara.components.LaraPreference;
 import de.cesr.lara.components.agents.LaraAgent;
-import de.cesr.lara.toolbox.snanalysis.goals.LSNFreeCapacity;
 
 /**
  * 
@@ -41,16 +40,16 @@ public class LSNIncreaseActivity<A extends LaraAgent<A, LSNIncreaseActivity<A>>>
 	 * @param utilities
 	 */
 	public LSNIncreaseActivity(String key, A agent,
-			Map<Class<? extends LaraPreference>, Double> utilities) {
+			Map<LaraPreference, Double> utilities) {
 		super(key, agent, utilities);
 	}
 
 	/**
-	 * @see de.cesr.lara.toolbox.snanalysis.bos.LAbstractSNBO#computeUtility(Class)
+	 * @see de.cesr.lara.toolbox.snanalysis.bos.LAbstractSNBO#computeUtility(LaraPreference)
 	 */
 	@Override
-	public boolean computeUtility(Class<? extends LaraPreference> goal) {
-		if (goal == LSNFreeCapacity.class) {
+	public boolean computeUtility(LaraPreference goal) {
+		if (goal.getId().equals("LSNFreeCapacity")) {
 
 		}
 		return false;
@@ -58,7 +57,7 @@ public class LSNIncreaseActivity<A extends LaraAgent<A, LSNIncreaseActivity<A>>>
 
 	@Override
 	public LSNIncreaseActivity<A> getModifiedBO(A agent,
-			Map<Class<? extends LaraPreference>, Double> utilities) {
+			Map<LaraPreference, Double> utilities) {
 		return new LSNIncreaseActivity<A>(getKey(), agent, utilities);
 	}
 

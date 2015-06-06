@@ -1,0 +1,26 @@
+<LBoFactoryList>
+	<bofactory classname="de.cesr.lara.testing.LTestUtils$LTestBo">
+		 <key>BO1</key>
+		 <preferenceUtilities>
+			 <utility pref="PreferenceA">0.5</utility>
+			 <utility pref="PreferenceB">0.3</utility>
+		 </preferenceUtilities>
+		 <agentclassname>de.cesr.lara.testing.LTestUtils$LTestAgent</agentclassname>
+	</bofactory>
+	<bofactory classname="de.cesr.lara.testing.LTestUtils$LTestBo">
+		 <key>BO2</key>
+		 <preferenceUtilities>
+			 <utility pref="PreferenceA">1.5</utility>
+			 <utility pref="PreferenceB">0.3</utility>
+		 </preferenceUtilities>
+		 <agentclassname>de.cesr.lara.testing.LTestUtils$LTestAgent</agentclassname>
+	</bofactory>
+	<bofactory classname="de.cesr.lara.testing.LTestUtils$LTestBo">
+		 <key>BO3</key>
+		 <preferenceUtilities>
+			 <utility pref="PreferenceC">0.5</utility>
+			 <utility pref="PreferenceB">0.3</utility>
+		 </preferenceUtilities>
+		 <agentclassname>de.cesr.lara.testing.LTestUtils$LTestAgent</agentclassname>
+	</bofactory>
+</LBoFactoryList>

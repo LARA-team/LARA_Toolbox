@@ -43,7 +43,7 @@ public abstract class LAbstractSNBO<A extends LaraAgent<A, BO>, BO extends LAbst
 	 * @param utilities
 	 */
 	public LAbstractSNBO(String key, A agent,
-			Map<Class<? extends LaraPreference>, Double> utilities) {
+			Map<LaraPreference, Double> utilities) {
 		super(key, agent, utilities);
 	}
 
@@ -51,16 +51,16 @@ public abstract class LAbstractSNBO<A extends LaraAgent<A, BO>, BO extends LAbst
 	 * @param goal
 	 * @return Created by Sascha Holzhauer on 25.01.2010
 	 */
-	public abstract boolean computeUtility(Class<? extends LaraPreference> goal);
+	public abstract boolean computeUtility(LaraPreference goal);
 
 	/**
 	 * @param dConfig
 	 */
 	@Override
-	public Map<Class<? extends LaraPreference>, Double> getSituationalUtilities(
+	public Map<LaraPreference, Double> getSituationalUtilities(
 			LaraDecisionConfiguration dConfiguration) {
-		Map<Class<? extends LaraPreference>, Double> utilities = getModifiableUtilities();
-		for (Class<? extends LaraPreference> goal : dConfiguration
+		Map<LaraPreference, Double> utilities = getModifiableUtilities();
+		for (LaraPreference goal : dConfiguration
 				.getPreferences()) {
 			computeUtility(goal);
 		}
