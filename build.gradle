@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-version = '0.3.1'
+version = '0.3.2'
 
 sourceSets {
 	main {
@@ -32,6 +32,7 @@ eclipse {
         }
 	}
 }
+
 	  
 repositories {
 	mavenLocal()
@@ -43,8 +44,10 @@ configurations {
 }
 
 dependencies {
+	compile files("C:/Data/KS/LARA/HG/LARA_Base/bin")
 	compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
 	compile group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
+	compile group: 'log4j', name: 'log4j', version: '1.2.17+'
 	compile group: 'org.apache.servicemix.bundles', name: 'org.apache.servicemix.bundles.collections-generic', version: '4+'
 	compile group: 'repast.simphony', name: 'repast.simphony.binAndSrc', version: '2.1.+'
 	compile group: 'de.cesr', name: 'parma', version: '0.9.4+'
