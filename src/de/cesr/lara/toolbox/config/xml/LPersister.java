@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.filter.Filter;
+import org.simpleframework.xml.filter.PlatformFilter;
 import org.simpleframework.xml.transform.Matcher;
 import org.simpleframework.xml.transform.RegistryMatcher;
 
@@ -49,8 +51,8 @@ public class LPersister extends Persister {
 	protected LaraContextulisedPathProvider pathProvider;
 
 
-	private LPersister(Matcher matcher) {
-		super(matcher);
+	private LPersister(Filter filter, Matcher matcher) {
+		super(filter, matcher);
 		this.pathProvider = new LaraContextulisedPathProvider() {
 			@Override
 			public String getPath(String filename) {
@@ -60,22 +62,35 @@ public class LPersister extends Persister {
 	}
 
 	/**
-	 * NOTE: THe persister is not accessible from {@link LaraModel} because of
-	 * LARA_Base's independence from LARA_Tools.
+	 * NOTE: THe persister is not accessible from {@link LaraModel} because of LARA_Base's independence from LARA_Tools.
 	 * 
 	 * @param id
-	 *            id to identify {@link LaraModel}
+	 *        id to identify {@link LaraModel}
 	 * 
 	 * @return persister
 	 */
 	static public LPersister getPersister(Object id) {
+		return getPersister(new PlatformFilter(), id);
+	}
+
+	/**
+	 * NOTE: If the persister has been requested before, even without the (same) filter, the old one is returned! NOTE:
+	 * The persister is not accessible from {@link LaraModel} because of LARA_Base's independence from LARA_Tools.
+	 * 
+	 * @param filter
+	 * @param id
+	 *        id to identify {@link LaraModel}
+	 * 
+	 * @return persister
+	 */
+	static public LPersister getPersister(Filter filter, Object id) {
 		if (LPersister.persisters.get(id) == null) {
 			RegistryMatcher matcher = new RegistryMatcher();
 			matcher.bind(LaraPreference.class,
 					new LPreferenceLookupTransformer(id));
 			matcher.bind(LaraDecisionConfiguration.class,
 					new LDConfigLookupTransformer(id));
-			LPersister.persisters.put(id, new LPersister(matcher));
+			LPersister.persisters.put(id, new LPersister(filter, matcher));
 		}
 		return LPersister.persisters.get(id);
 	}
