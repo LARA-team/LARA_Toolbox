@@ -47,7 +47,7 @@ public class LXmlAgentConfigurator<A extends LaraAgent<A, BO>, BO extends LaraBe
 	Map<LaraPreference, Double> preferenceWeights = new HashMap<LaraPreference, Double>();
 
 	@Element(name = "preprocessorConfigurator", required = false, type = LPreprocessorConfigurator.class)
-	LaraPreprocessorConfigurator<A, BO> ppConfigurator;
+	LaraPreprocessorConfigurator<A, BO> ppConfigurator = LPreprocessorConfigurator.getNewPreprocessorConfigurator();
 
 	Set<LBoFactory> boFactories = new HashSet<LBoFactory>();
 
