@@ -29,40 +29,35 @@ import java.util.Map;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.ElementList;
 
 import de.cesr.lara.components.LaraBehaviouralOption;
-import de.cesr.lara.components.LaraPreference;
 import de.cesr.lara.components.agents.LaraAgent;
 
 
 /**
- * Applied to deserialise {@link LaraBehaviouralOption}s, which can't be deserialised directly since they require the
- * reference to the agent class they belong to.
+ * Applied to deserialise {@link LaraBehaviouralOption} that provide a setter for a parameter map
+ * {@link ParameterMapAssignableBo}.
  * 
  * @author Sascha Holzhauer
  * 
  */
-public class LBoFactory {
+public class LParameterMapBoFactory extends LBoFactory {
 
-	@Attribute(required = false)
-	protected String classname = null;
+	@Element(required = true)
+	String classname = null;
 
-	@ElementMap(name = "preferenceUtilities", entry = "utility", key = "pref", attribute = true, inline = false, required = false)
-	protected Map<LaraPreference, Double> preferenceWeights = new HashMap<>();
+	@ElementList(required = false, entry = "parameter")
+	Map<String, Object> parameters = new HashMap<>();
 
-	@Element(required = true, name = "key")
-	protected String key = null;
+	@Attribute(required = true, name = "key")
+	String key = null;
 
-	@Element(required = false)
-	protected String agentclassname = null;
-
-	public LBoFactory() {
+	public LParameterMapBoFactory() {
 	}
 
 	/**
 	 * @param lbc
-	 * @param modelId
 	 * @return potential option
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
@@ -72,19 +67,19 @@ public class LBoFactory {
 	 * @throws SecurityException
 	 * @throws ClassNotFoundException
 	 */
-	public LaraBehaviouralOption<?, ?> assembleBo(LaraAgent<?, ?> lbc,
-			Object modelId)
+	public LaraBehaviouralOption<?, ?> assemblePo(LaraAgent<?,?> lbc)
 			throws InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException,
 			NoSuchMethodException, SecurityException, ClassNotFoundException {
 
-		Class<?> agentclass = LaraAgent.class;
-		if (agentclassname != null) {
-			agentclass = Class.forName(agentclassname);
-		}
-		return (LaraBehaviouralOption<?, ?>) Class
+		LaraBehaviouralOption<?, ?> bo = (LaraBehaviouralOption<?, ?>)  Class
 				.forName(classname)
-				.getConstructor(String.class, agentclass, Map.class)
-				.newInstance(this.key, lbc, preferenceWeights);
+						.getConstructor(String.class, LaraAgent.class, Map.class)
+						.newInstance(this.key, lbc, this.preferenceWeights);
+		
+		if (bo instanceof ParameterMapAssignableBo) {
+			((ParameterMapAssignableBo)bo).setParameterMap(parameters);
+		}
+		return bo;
 	}
 }

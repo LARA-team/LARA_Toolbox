@@ -19,7 +19,7 @@ import org.simpleframework.xml.Root;
 public class LBoFactoryList {
 
 	@ElementList(inline = true, required = false, entry = "bofactory", empty = false)
-	List<LBoFactory> bofactories = new ArrayList<LBoFactory>();
+	List<LBoFactory> bofactories = new ArrayList<>();
 
 	public List<LBoFactory> getBoFactories() {
 		return this.bofactories;
