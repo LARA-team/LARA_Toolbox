@@ -41,17 +41,18 @@ public class LXmlAgentConfigurator<A extends LaraAgent<A, BO>, BO extends LaraBe
 	 * configuration files).
 	 */
 	@ElementList(required = false, inline = true, entry = "bofile")
-	List<String> boFileList = new ArrayList<String>();
+	protected List<String> boFileList = new ArrayList<String>();
 
 	@ElementMap(entry = "preferenceWeight", key = "pref", attribute = true, required = false, inline = true)
-	Map<LaraPreference, Double> preferenceWeights = new HashMap<LaraPreference, Double>();
+	protected Map<LaraPreference, Double> preferenceWeights = new HashMap<LaraPreference, Double>();
 
 	@Element(name = "preprocessorConfigurator", required = false, type = LPreprocessorConfigurator.class)
-	LaraPreprocessorConfigurator<A, BO> ppConfigurator = LPreprocessorConfigurator.getNewPreprocessorConfigurator();
+	protected LaraPreprocessorConfigurator<A, BO> ppConfigurator = LPreprocessorConfigurator
+	        .getNewPreprocessorConfigurator();
 
-	Set<LBoFactory> boFactories = new HashSet<LBoFactory>();
+	protected Set<LBoFactory> boFactories = new HashSet<LBoFactory>();
 
-	Object modelId = null;
+	protected Object modelId = null;
 
 	public void load(Object id) throws Exception {
 		this.modelId = id;
