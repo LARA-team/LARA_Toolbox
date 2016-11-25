@@ -133,7 +133,8 @@ public class LPersister extends Persister {
 		} catch (Exception e) {
 			logger.error(
 					"Couldn't read file '" + pathProvider.getPath(filename)
-					+ "' for class " + type.getSimpleName(), e);
+ + "' for class " + type.getSimpleName()
+			                + ". Was setPathProvider() called?", e);
 		}
 		return null;
 	}
