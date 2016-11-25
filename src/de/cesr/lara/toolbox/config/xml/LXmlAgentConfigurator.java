@@ -21,6 +21,7 @@ import de.cesr.lara.components.LaraPreference;
 import de.cesr.lara.components.agents.LaraAgent;
 import de.cesr.lara.components.container.exceptions.LContainerFullException;
 import de.cesr.lara.components.container.exceptions.LInvalidTimestampException;
+import de.cesr.lara.components.postprocessor.LaraPostprocessorComp;
 import de.cesr.lara.components.preprocessor.LaraPreprocessorConfigurator;
 import de.cesr.lara.components.preprocessor.impl.LPreprocessorConfigurator;
 import de.cesr.lara.toolbox.config.LaraAgentConfigurator;
@@ -49,6 +50,9 @@ public class LXmlAgentConfigurator<A extends LaraAgent<A, BO>, BO extends LaraBe
 	@Element(name = "preprocessorConfigurator", required = false, type = LPreprocessorConfigurator.class)
 	protected LaraPreprocessorConfigurator<A, BO> ppConfigurator = LPreprocessorConfigurator
 	        .getNewPreprocessorConfigurator();
+	
+	@Element(name = "postprocessor", required = false)
+	protected LaraPostprocessorComp<A, BO> postprocessor;
 
 	protected Set<LBoFactory> boFactories = new HashSet<LBoFactory>();
 
@@ -101,8 +105,11 @@ public class LXmlAgentConfigurator<A extends LaraAgent<A, BO>, BO extends LaraBe
 			}
 		}
 
-
 		agent.getLaraComp().addPreferenceWeights(preferenceWeights);
 		agent.getLaraComp().setPreprocessor(ppConfigurator.getPreprocessor());
+
+		if (this.postprocessor != null) {
+			agent.getLaraComp().setPostProcessor(postprocessor);
+		}
 	}
 }
